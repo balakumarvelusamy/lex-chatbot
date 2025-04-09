@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 export default function Home() {
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // New state for loading
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   // Scroll to bottom when new message is added
@@ -21,6 +22,8 @@ export default function Home() {
 
     try {
       setInput("");
+      setIsLoading(true); // Start loading
+
       const res = await fetch("https://syr23cxixl.execute-api.us-east-1.amazonaws.com/ai-chat-bot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -37,6 +40,8 @@ export default function Home() {
     } catch (err) {
       console.error("Error calling Lex:", err);
       setMessages((prev) => [...prev, { sender: "bot", text: "Error contacting bot." }]);
+    } finally {
+      setIsLoading(false); // Stop loading
     }
 
     setInput("");
@@ -49,7 +54,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-between p-4 bg-gray-100">
       <div className="bg-white rounded shadow p-3 max-w-2xl w-full" align="center">
-        Bala Resume
+        Welcome
       </div>
       <div className="w-full max-w-2xl flex flex-col flex-grow overflow-y-auto bg-white rounded shadow p-4 mt-4 space-y-2">
         {messages.map((msg, index) => (
@@ -57,6 +62,13 @@ export default function Home() {
             {msg.text}
           </div>
         ))}
+
+        {isLoading && (
+          <div className="p-2 rounded-md bg-gray-200 self-start">
+            <span>Loading...</span>
+          </div>
+        )}
+
         <div ref={bottomRef} />
       </div>
 
