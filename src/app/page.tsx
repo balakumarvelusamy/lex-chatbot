@@ -58,9 +58,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-between p-4 bg-gray-100">
-      <div className="bg-white rounded shadow p-3 max-w-2xl w-full" align="center">
-        Welcome
-      </div>
+      <div className="bg-white rounded shadow p-3 max-w-2xl w-full px-2">Welcome</div>
       <div className="w-full max-w-2xl flex flex-col flex-grow overflow-y-auto bg-white rounded shadow p-4 mt-4 space-y-2">
         {messages.map((msg, index) => (
           <div key={index} className={`p-2 rounded-md ${msg.sender === "user" ? "bg-blue-100 self-end" : "bg-gray-200 self-start"}`}>
