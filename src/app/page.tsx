@@ -12,6 +12,9 @@ export default function Home() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+  type BotMessage = {
+    content: string;
+  };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -29,12 +32,14 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: input }),
       });
+
       console.log("body", { text: input });
       const data = await res.json();
       console.log(data);
-      const botMessages = data.messages || [];
 
-      botMessages.forEach((msg: any) => {
+      const botMessages: BotMessage[] = data.messages || [];
+
+      botMessages.forEach((msg) => {
         setMessages((prev) => [...prev, { sender: "bot", text: msg.content }]);
       });
     } catch (err) {
